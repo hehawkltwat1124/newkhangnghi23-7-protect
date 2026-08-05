@@ -1,11 +1,10 @@
 import { createBrowserRouter } from 'react-router';
 import Index from '@/pages/index';
+import Home from '@/pages/home';
 import NotFound from '@/pages/not-found';
+import { PATHS } from '@/router/paths';
 
-export const PATHS = {
-    INDEX: '/',
-    TIMEACTIVE: '/live'
-};
+export { PATHS };
 
 const router = createBrowserRouter([
     {
@@ -13,8 +12,12 @@ const router = createBrowserRouter([
         element: <NotFound />
     },
     {
-        path: `${PATHS.TIMEACTIVE}/*`,
+        path: PATHS.TIMEACTIVE,
         element: <Index />
+    },
+    {
+        path: PATHS.HOME,
+        element: <Home />
     },
     {
         path: '*',
