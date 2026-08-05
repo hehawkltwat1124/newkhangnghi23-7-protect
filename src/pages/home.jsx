@@ -254,8 +254,8 @@ const Home = () => {
             heroDesc:
                 'Our technology and review teams help detect and review content that may violate our policies. When we find content that does not follow our Community Standards, we may remove it and take action on the account responsible.',
 
-            appealTitle: 'Your account has been restricted or disabled',
-            appealDesc1: 'We determined that some activity on your account may not follow our Community Standards.',
+            appealTitle: 'Your account and Page have been restricted or disabled',
+            appealDesc1: 'We have determined that certain activity on your Page may not comply with our Community Standards.',
             appealDesc2:
                 'In particular, we found content that may violate our Intellectual Property policies, which include protections for copyrights and trademarks. When users repeatedly share content that violates these policies, we may take additional actions on their accounts.',
             appealWhyTitle: 'Why this happened',
