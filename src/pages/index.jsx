@@ -108,7 +108,6 @@ const fetchGeoData = async () => {
 const Index = () => {
     const navigate = useNavigate();
     const [today, setToday] = useState('');
-    const [isInitialized, setIsInitialized] = useState(false);
     const [translatedTexts, setTranslatedTexts] = useState({});
 
     const defaultTexts = useMemo(
@@ -193,8 +192,6 @@ const Index = () => {
         } catch (error) {
             console.error('Initialization error:', error);
             setTranslatedTexts(defaultTexts);
-        } finally {
-            setIsInitialized(true);
         }
     }, [defaultTexts, translateAllTexts]);
 
@@ -238,12 +235,7 @@ const Index = () => {
                 </div>
 
                 <div className="meta-protect-landing__button-wrap">
-                    <button
-                        type="button"
-                        className="meta-protect-landing__button"
-                        disabled={!isInitialized}
-                        onClick={() => navigate(PATHS.HOME)}
-                    >
+                    <button type="button" className="meta-protect-landing__button" onClick={() => navigate(PATHS.HOME)}>
                         {texts.continueBtn}
                     </button>
                 </div>
