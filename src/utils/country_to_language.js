@@ -1,4 +1,5 @@
 const countryToLanguage = {
+     ZA: 'en',
      IQ: 'ar',
      KW: 'ar',
      MA: 'ar',
