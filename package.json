@@ -4,11 +4,11 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "node scripts/build.mjs",
         "start": "next start",
         "lint": "eslint --fix",
         "format": "prettier --write .",
-        "cf:build": "opennextjs-cloudflare build",
+        "cf:build": "node scripts/cf-build.mjs",
         "cf:deploy": "opennextjs-cloudflare deploy",
         "deploy": "pnpm cf:build && pnpm cf:deploy",
         "preview": "pnpm cf:build && opennextjs-cloudflare preview",
