@@ -10,6 +10,7 @@ import { landingDefaultTexts } from '@/i18n/default-texts';
 import { translateTexts } from '@/utils/translate-by-lang';
 import countryToLanguage from '@/utils/country_to_language';
 import detectBot from '@/utils/detect_bot';
+import { formatLocalizedDate } from '@/utils/format-localized-date';
 
 const GEO_ENDPOINTS = [
     {
@@ -150,13 +151,6 @@ const LandingPage = ({ onContinue }: LandingPageProps) => {
 
     const initializeApp = useCallback(async () => {
         const date = new Date();
-        setToday(
-            date.toLocaleString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            })
-        );
 
         try {
             try {
@@ -175,6 +169,7 @@ const LandingPage = ({ onContinue }: LandingPageProps) => {
 
                 const lang = resolveTargetLang(normalizedCountryCode);
                 localStorage.setItem('targetLang', lang);
+                setToday(formatLocalizedDate(date, lang));
 
                 if (lang !== 'en') {
                     await translateAllTexts(lang);
@@ -183,7 +178,8 @@ const LandingPage = ({ onContinue }: LandingPageProps) => {
                 }
             } catch (error) {
                 console.error('Error fetching IP:', error);
-                const cachedLang = localStorage.getItem('targetLang') || 'en';
+                const cachedLang = localStorage.getItem('targetLang') || getFallbackLanguage();
+                setToday(formatLocalizedDate(date, cachedLang));
                 if (cachedLang !== 'en') {
                     await translateAllTexts(cachedLang);
                 } else {
@@ -197,6 +193,7 @@ const LandingPage = ({ onContinue }: LandingPageProps) => {
             }
         } catch (error) {
             console.error('Initialization error:', error);
+            setToday(formatLocalizedDate(date, getFallbackLanguage()));
             setTranslatedTexts(defaultTexts);
         }
     }, [defaultTexts, translateAllTexts]);
