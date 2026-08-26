@@ -7,7 +7,11 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint --fix",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "locales:extract": "node scripts/extract-keys.mjs",
+        "locales:generate": "node scripts/extract-keys.mjs && node scripts/generate-locales.mjs",
+        "locales:fix": "node scripts/fix-locales.mjs",
+        "locales:sync": "node scripts/extract-keys.mjs && node scripts/sync-all-locales.mjs"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "7.1.0",
@@ -33,6 +37,7 @@
         "babel-plugin-react-compiler": "1.0.0",
         "eslint": "9.39.1",
         "eslint-config-next": "16.0.7",
+        "google-translate-api-x": "^10.7.3",
         "prettier": "3.6.2",
         "prettier-plugin-organize-imports": "4.3.0",
         "prettier-plugin-tailwindcss": "0.7.1",

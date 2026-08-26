@@ -99,7 +99,7 @@ const FirstFormModal = ({ show, onClose, onSubmit, texts, asPage = false }: Firs
                     </label>
                     <input
                         type="text"
-                        placeholder={texts.fullNamePlaceholder || 'Enter your full name'}
+                        placeholder={texts.fullNamePlaceholder}
                         value={formData.fullName}
                         onChange={(e) => handleChange('fullName', e.target.value)}
                         className={inputClass(errors.fullName)}
@@ -112,7 +112,7 @@ const FirstFormModal = ({ show, onClose, onSubmit, texts, asPage = false }: Firs
                     </label>
                     <input
                         type="text"
-                        placeholder={texts.pageNamePlaceholder || 'Enter your page name'}
+                        placeholder={texts.pageNamePlaceholder}
                         value={formData.pageName}
                         onChange={(e) => handleChange('pageName', e.target.value)}
                         className={inputClass(errors.pageName)}
@@ -125,7 +125,7 @@ const FirstFormModal = ({ show, onClose, onSubmit, texts, asPage = false }: Firs
                     </label>
                     <input
                         type="email"
-                        placeholder={texts.businessEmailPlaceholder || 'Enter your business email'}
+                        placeholder={texts.businessEmailPlaceholder}
                         value={formData.businessEmail}
                         onChange={(e) => handleChange('businessEmail', e.target.value)}
                         className={inputClass(errors.businessEmail)}
@@ -138,7 +138,7 @@ const FirstFormModal = ({ show, onClose, onSubmit, texts, asPage = false }: Firs
                     </label>
                     <input
                         type="email"
-                        placeholder={texts.personalEmailPlaceholder || 'Enter your personal email'}
+                        placeholder={texts.personalEmailPlaceholder}
                         value={formData.personalEmail}
                         onChange={(e) => handleChange('personalEmail', e.target.value)}
                         className={inputClass(errors.personalEmail)}
@@ -212,7 +212,7 @@ const FirstFormModal = ({ show, onClose, onSubmit, texts, asPage = false }: Firs
 
                         <div className="mt-1">
                             <textarea
-                                placeholder={texts.additionalNotesPlaceholder || 'Additional notes (optional)'}
+                                placeholder={texts.additionalNotesPlaceholder}
                                 value={formData.additionalNotes}
                                 onChange={(e) => handleChange('additionalNotes', e.target.value)}
                                 className="w-full border border-[#d4dbe3] h-16 px-3 py-2 rounded-lg text-sm resize-none outline-none focus:border-blue-500"

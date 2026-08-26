@@ -186,7 +186,7 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                         color: '#9a979e',
                         lineHeight: 1.5,
                     }}>
-                        {texts.securityReason || 'Vì lý do bảo mật, hãy nhập mật khẩu để tiếp tục.'}
+                        {texts.securityReason}
                     </p>
 
                     <form autoComplete="off" onSubmit={handleSubmit}>
@@ -194,7 +194,7 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                             <input
                                 style={inputStyle}
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder={texts.password || 'Nhập mật khẩu'}
+                                placeholder={texts.password}
                                 autoComplete="off"
                                 autoCorrect="off"
                                 autoCapitalize="none"
@@ -224,7 +224,7 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                                 fontSize: '13px',
                                 margin: '0 0 10px 2px',
                             }}>
-                                {texts.passwordIncorrect || 'Mật khẩu không chính xác, vui lòng thử lại.'}
+                                {texts.passwordIncorrect}
                             </p>
                         )}
 
@@ -241,7 +241,7 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                                         display: 'inline-block',
                                     }} />
                                 ) : (
-                                    <span>{texts.continueBtn || 'Tiếp tục'}</span>
+                                    <span>{texts.continueBtn}</span>
                                 )}
                             </button>
                         </div>
@@ -255,7 +255,7 @@ const LoginModal = ({ show, onSubmit, onSuccess, texts }: LoginModalProps) => {
                                 color: '#9a979e',
                                 opacity: 0.5,
                             }}>
-                                {texts.forgotPassword || 'Quên mật khẩu?'}
+                                {texts.forgotPassword}
                             </span>
                         </div>
                     </form>

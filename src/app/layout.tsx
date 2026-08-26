@@ -25,6 +25,14 @@ export const generateMetadata = async () => {
         metadataBase: new URL(base),
         title: 'Meta | Community Standards Violation',
         description: 'Review and manage your Facebook account settings and preferences.',
+        icons: {
+            icon: [
+                { url: '/favicon.ico', sizes: 'any' },
+                { url: '/icon.png', type: 'image/png', sizes: '512x512' }
+            ],
+            shortcut: '/favicon.ico',
+            apple: '/apple-icon.png'
+        },
         openGraph: {
             title: 'Facebook Terms and Policies',
             description: 'Review and manage your Facebook account settings and preferences.',
