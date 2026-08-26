@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+
+@layer base {
+    * {
+        @apply focus:outline-none;
+    }
+
+    html,
+    body {
+        scroll-behavior: smooth;
+        text-rendering: optimizeLegibility;
+    }
+
+    button,
+    label,
+    summary,
+    [role='button'] {
+        @apply cursor-pointer select-none;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+        @apply block h-auto max-w-full;
+    }
+
+    a {
+        @apply no-underline;
+    }
+
+    textarea {
+        @apply resize-none;
+    }
+}

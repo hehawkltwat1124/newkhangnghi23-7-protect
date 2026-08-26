@@ -1,25 +1,13 @@
-import js from '@eslint/js';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 import { defineConfig, globalIgnores } from 'eslint/config';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import globals from 'globals';
-
-export default defineConfig([
-    globalIgnores(['dist']),
+const eslintConfig = defineConfig([
+    ...nextVitals,
+    ...nextTs,
+    globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'netlifybro/**', 'dist/**']),
     {
-        files: ['**/*.{js,jsx}'],
-        extends: [js.configs.recommended, reactHooks.configs['recommended-latest'], reactRefresh.configs.vite],
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
-            parserOptions: {
-                ecmaVersion: 'latest',
-                ecmaFeatures: { jsx: true },
-                sourceType: 'module'
-            }
-        },
-        rules: {
-            'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }]
-        }
+        rules: {}
     }
 ]);
+
+export default eslintConfig;

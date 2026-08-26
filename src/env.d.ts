@@ -14,7 +14,8 @@ declare module '*.jpeg' {
 }
 
 declare module '*.svg' {
-    const content: string;
+    import type { StaticImageData } from 'next/image';
+    const content: StaticImageData;
     export default content;
 }
 
@@ -22,3 +23,5 @@ declare module '*.webp' {
     const content: string;
     export default content;
 }
+
+declare module 'intl-tel-input/build/js/utils.js';
